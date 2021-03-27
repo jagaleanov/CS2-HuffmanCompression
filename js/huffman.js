@@ -366,6 +366,7 @@ class Huffman {
     //HTML
     /**
      * @desc método recursivo que recorre el árbol y construye el html para ser impreso
+     * @param Node head - cabeza del árbol
      * @return string html 
     */
     treeHTML(head) {
@@ -482,7 +483,7 @@ class Huffman {
 }
 
 /**
- * @desc función que busca el mensaje ingresado en el formulario e inicia huffman
+ * @desc función que busca el mensaje ingresado en el formulario, inicia huffman e imprime los resultados
  * @return void
 */
 function startHuffman() {
