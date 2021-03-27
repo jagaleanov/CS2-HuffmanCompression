@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Algoritmo de Huffman</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!--JS-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+    <div class="fluid-container">
+        <nav class="avbar navbar-dark bg-dark navbar-expand-lg">
+            <h1 class="navbar-brand mx-4">Algoritmo de Huffman</h1>
+        </nav>
+        <div class="card mx-4">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-5 col-lg-6 col-xl-6">
+                        <h5 class="card-title">Entrada de datos</h5>
+                        <div class="form-group">
+                            <label for="numberTxt">Mensaje</label>
+                            <input type="text" name="msgTxt" id="msgTxt" class="form-control" value=""
+                                autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" id="submitTree" class="btn btn-primary btn-block" value="Ingresar"
+                                onclick="startHuffman()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mx-4 mt-4">
+            <div class="card-body ">
+                <h5 class="card-title">Matriz</h5>
+                <div class="table-responsive">
+                    <table id="matrixTable" class="table table-bordered table-sm table-hover">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mx-4 mt-4">
+            <div class="card-body ">
+                <h5 class="card-title">Árbol generado</h5>
+                <div class="tree">
+                    <ul id="treeUl">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card mx-4 mt-4">
+            <div class="card-body ">
+                <h5 class="card-title">Convenciones</h5>
+                <div class="table-responsive">
+                    <table id="addressTable" class="table table-bordered table-sm table-hover">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mx-4 mt-4">
+            <div class="card-body ">
+                <h5 class="card-title">Mensaje encriptado</h5>
+                <div class="table-responsive">
+                    <table id="msgCodeTable" class="table table-bordered table-sm table-hover">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card mx-4 mt-4">
+            <div class="card-body ">
+                <div class="table-responsive">
+                    <p>Comprimido: <span id="bits">0</span> bits</p>
+                    <p>Codificado: <span id="used">0</span>% Ahorro:<span id="free">0</span>%</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <script src="js/huffman.js"></script>
+</body>
+
+</html>
