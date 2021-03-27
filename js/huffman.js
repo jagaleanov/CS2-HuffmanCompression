@@ -110,7 +110,7 @@ class Huffman {
     tableAddress;
     tableMsgCode;
 
-    objPercents;
+    objInfo;
 
     constructor(msg) {
         this.msg = msg;
@@ -120,14 +120,14 @@ class Huffman {
         this.tableMatrix = [];
         this.tableAddress = [];
         this.tableMsgCode = [];
-        
-        this.objPercents = {};
+
+        this.objInfo = {};
 
         this.setTree();
         this.setMatrix();
         this.setAddress(this.headTree, '')
         this.setMsgCode();
-        this.setPercents();
+        this.setinfo();
     }
 
     quickSort(list, low, high) {
@@ -262,22 +262,24 @@ class Huffman {
         }
     }
 
-    setPercents() {
+    setinfo() {
         let initBits = this.tableMsgCode.length * 8;
-        let finalBits=0;
+        let finalBits = 0;
         for (let i = 0; i < this.tableMsgCode.length; i++) {
             finalBits += this.tableMsgCode[i][1].length;
         }
 
-        let usedPercent = finalBits*100/initBits;
-        let freePercent = 100-usedPercent;
+        let usedPercent = finalBits * 100 / initBits;
+        let freePercent = 100 - usedPercent;
 
-        this.objPercents={};
-        this.objPercents.initBits = initBits;
-        this.objPercents.finalBits = finalBits;
-        this.objPercents.usedPercent = usedPercent;
-        this.objPercents.freePercent = freePercent;
-
+        this.objInfo = {};
+        this.objInfo.initChars = this.msg.length;
+        this.objInfo.usedChars = this.msgToAsciiArray().length;
+        this.objInfo.initBits = initBits;
+        this.objInfo.finalBits = finalBits;
+        this.objInfo.difBits = initBits - finalBits;
+        this.objInfo.usedPercent = usedPercent;
+        this.objInfo.freePercent = freePercent;
     }
 
     //HTML
@@ -332,10 +334,10 @@ class Huffman {
                     row += "<th>Tipo</th>";
                     break;
                 case 5:
-                    row += "<th>HijoIzq</th>";
+                    row += "<th>Izquierdo</th>";
                     break;
                 case 6:
-                    row += "<th>HijoDer</th>";
+                    row += "<th>Derecho</th>";
                     break;
             }
 
@@ -390,19 +392,25 @@ function startHuffman() {
         $('#addressTable').html(huffman.addressHTML());
         $('#msgCodeTable').html(huffman.msgCodeHTML());
         $('#msgCodeTable').html(huffman.msgCodeHTML());
-        $('#initBits').html(huffman.objPercents.initBits);
-        $('#finalBits').html(huffman.objPercents.finalBits);
-        $('#usedPercent').html(huffman.objPercents.usedPercent);
-        $('#freePercent').html(huffman.objPercents.freePercent);
+        $('#initChars').html(huffman.objInfo.initChars);
+        $('#usedChars').html(huffman.objInfo.usedChars);
+        $('#initBits').html(huffman.objInfo.initBits);
+        $('#finalBits').html(huffman.objInfo.finalBits);
+        $('#difBits').html(huffman.objInfo.difBits);
+        $('#usedPercent').html(huffman.objInfo.usedPercent);
+        $('#freePercent').html(huffman.objInfo.freePercent);
     } else {
         $('#matrixTable').html('');
         $('#treeUl').html('');
         $('#addressTable').html('');
         $('#msgCodeTable').html('');
-        $('#initBits').html('');
-        $('#finalBits').html('');
-        $('#usedPercent').html('');
-        $('#freePercent').html('');
+        $('#initChars').html(0);
+        $('#usedChars').html(0);
+        $('#initBits').html(0);
+        $('#finalBits').html(0);
+        $('#difBits').html(0);
+        $('#usedPercent').html(0);
+        $('#freePercent').html(0);
         alert('Ingrese un dato valido');
     }
 }
