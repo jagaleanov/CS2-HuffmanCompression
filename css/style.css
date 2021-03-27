@@ -84,7 +84,7 @@ table{
     display: inline-block;
     border: 1px solid #000;
     transition: all 0.5s;
-    background: #28a745;
+    background: #007bff;
     cursor: pointer;
     color: #fff; 
 }

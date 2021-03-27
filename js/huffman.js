@@ -278,8 +278,8 @@ class Huffman {
         this.objInfo.initBits = initBits;
         this.objInfo.finalBits = finalBits;
         this.objInfo.difBits = initBits - finalBits;
-        this.objInfo.usedPercent = usedPercent;
-        this.objInfo.freePercent = freePercent;
+        this.objInfo.usedPercent = Math.round((usedPercent + Number.EPSILON) * 100) / 100;
+        this.objInfo.freePercent = Math.round((freePercent + Number.EPSILON) * 100) / 100;
     }
 
     //HTML
@@ -322,7 +322,7 @@ class Huffman {
                     row += "<th>Posición</th>";
                     break;
                 case 1:
-                    row += "<th>Simbolo</th>";
+                    row += "<th>Símbolo</th>";
                     break;
                 case 2:
                     row += "<th>Frecuencia</th>";
@@ -358,7 +358,7 @@ class Huffman {
             let row = '<tr>';
 
             for (let j = 0; j < this.tableAddress.length; j++) {
-                row += '<td>' + (i == 0 ? String.fromCharCode(this.tableAddress[j][i]) : this.tableAddress[j][i]) + '</td>';
+                row += (i == 0 ? '<th>' + String.fromCharCode(this.tableAddress[j][i]) + '</th>' : '<td>' + this.tableAddress[j][i]) + '</td>';
             }
             row += '</tr>';
             html += row;
@@ -373,7 +373,7 @@ class Huffman {
         for (let i = 0; i < this.tableMsgCode[0].length; i++) {
             let row = '<tr>';
             for (let j = 0; j < this.tableMsgCode.length; j++) {
-                row += '<td>' + (i == 0 ? String.fromCharCode(this.tableMsgCode[j][i]) : this.tableMsgCode[j][i]) + '</td>';
+                row += (i == 0 ? '<th>' + String.fromCharCode(this.tableMsgCode[j][i]) + '</th>' : '<td>' + this.tableMsgCode[j][i] + '</td>');
             }
             row += '</tr>';
             html += row;
@@ -385,7 +385,7 @@ class Huffman {
 }
 
 function startHuffman() {
-    if ($('#msgTxt').val() != '') {
+    if ($('#msgTxt').val() != '' && $('#msgTxt').val().length > 1) {
         let huffman = new Huffman($('#msgTxt').val());
         $('#treeUl').html(huffman.treeHTML(huffman.headTree));
         $('#matrixTable').html(huffman.matrixHTML());
@@ -399,6 +399,10 @@ function startHuffman() {
         $('#difBits').html(huffman.objInfo.difBits);
         $('#usedPercent').html(huffman.objInfo.usedPercent);
         $('#freePercent').html(huffman.objInfo.freePercent);
+        $('#progressBar').attr('style', 'width:' + huffman.objInfo.usedPercent + '%')
+        $('#progressBar').html(huffman.objInfo.usedPercent + "%");
+        $('#freeBar').attr('style', 'width:' + huffman.objInfo.freePercent + '%')
+        $('#freeBar').html(huffman.objInfo.freePercent + "%");
     } else {
         $('#matrixTable').html('');
         $('#treeUl').html('');
@@ -411,9 +415,10 @@ function startHuffman() {
         $('#difBits').html(0);
         $('#usedPercent').html(0);
         $('#freePercent').html(0);
+        $('#progressBar').attr('style', 'width:0%')
+        $('#progressBar').html('0%');
+        $('#freeBar').attr('style', 'width:0%')
+        $('#freeBar').html('0%');
         alert('Ingrese un dato valido');
     }
 }
-
-//let huffman = new Huffman("cienciasdos");
-//$('#treeUl').html(huffman.treeHTML(huffman.headTree));
