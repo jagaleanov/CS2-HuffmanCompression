@@ -263,24 +263,20 @@ class Huffman {
     }
 
     setPercents() {
-
+        let initBits = this.tableMsgCode.length * 8;
         let finalBits=0;
         for (let i = 0; i < this.tableMsgCode.length; i++) {
             finalBits += this.tableMsgCode[i][1].length;
-            
         }
 
-
-        let usedPercent = finalBits*100/(this.tableMsgCode.length * 8);
+        let usedPercent = finalBits*100/initBits;
         let freePercent = 100-usedPercent;
 
-
         this.objPercents={};
+        this.objPercents.initBits = initBits;
         this.objPercents.finalBits = finalBits;
         this.objPercents.usedPercent = usedPercent;
         this.objPercents.freePercent = freePercent;
-
-        console.log(finalBits);
 
     }
 
@@ -394,17 +390,19 @@ function startHuffman() {
         $('#addressTable').html(huffman.addressHTML());
         $('#msgCodeTable').html(huffman.msgCodeHTML());
         $('#msgCodeTable').html(huffman.msgCodeHTML());
-        $('#bits').html(huffman.objPercents.finalBits);
-        $('#used').html(huffman.objPercents.usedPercent);
-        $('#free').html(huffman.objPercents.freePercent);
+        $('#initBits').html(huffman.objPercents.initBits);
+        $('#finalBits').html(huffman.objPercents.finalBits);
+        $('#usedPercent').html(huffman.objPercents.usedPercent);
+        $('#freePercent').html(huffman.objPercents.freePercent);
     } else {
         $('#matrixTable').html('');
         $('#treeUl').html('');
         $('#addressTable').html('');
         $('#msgCodeTable').html('');
-        $('#bits').html('');
-        $('#used').html('');
-        $('#free').html('');
+        $('#initBits').html('');
+        $('#finalBits').html('');
+        $('#usedPercent').html('');
+        $('#freePercent').html('');
         alert('Ingrese un dato valido');
     }
 }
