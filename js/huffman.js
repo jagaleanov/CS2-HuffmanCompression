@@ -25,9 +25,8 @@ class ListFreq {
         this.head = null;
     }
 
-    //HELPERS
     /**
-      * @desc método para añadir un nodo a la lista
+      * @desc método para añadir una frecuencia en un nuevo nodo de la lista
       * @param int value - valor de la frecuencia
       * @param int pos - posicion del nodo en la matriz
       * @return void
@@ -134,7 +133,8 @@ class Huffman {
     tableAddress;   //almacena los datos de la tabla de direcciones
     tableMsgCode;   //almacena los datos de la tabla de traducción del mensaje
 
-    objInfo;
+    objInfo;        //almacena los datos de info
+    encriptedMsg;   //almacena el mensaje encriptado
 
     /**
      * @desc constructor
@@ -327,7 +327,7 @@ class Huffman {
         let charArray = this.fullMsgToAsciiArray();//llamar el mensaje en un arreglo
 
         this.tableMsgCode = [];
-        for (let i = 0; i < charArray.length; i++) {//por cada letra en el mensaje
+        for (let i = 0; i < charArray.length; i++) {//por cada caracter en el mensaje
 
             for (let j = 0; j < this.tableAddress.length; j++) {//por cada elemento en la tabla de direcciones
                 if (this.tableAddress[j][0] == charArray[i]) {//si coinciden
@@ -353,7 +353,16 @@ class Huffman {
         let usedPercent = finalBits * 100 / initBits;//porcentaje usado
         let freePercent = 100 - usedPercent;//espacio liberado
 
+        //concatenar el mensaje encriptado
+        this.encriptedMsg = '';
+        for (let i = 0; i < this.tableMsgCode.length; i++) {
+            this.encriptedMsg += this.tableMsgCode[i][1];
+        }
+
         this.objInfo = {};
+        this.objInfo.msg = this.msg;
+        this.objInfo.encriptedMsg = this.encriptedMsg;
+        this.objInfo.decriptedMsg = this.decode();
         this.objInfo.initChars = this.msg.length;
         this.objInfo.usedChars = this.msgToAsciiArray().length;
         this.objInfo.initBits = initBits;
@@ -363,7 +372,28 @@ class Huffman {
         this.objInfo.freePercent = Math.round((freePercent + Number.EPSILON) * 100) / 100;//porcentaje liberado redondeado
     }
 
-    //HTML
+    /**
+     * @desc método que descifra el mensaje a partir de la tabla de direcciones
+     * @return mensaje decodificado
+    */
+    decode() {
+        let temp = '';
+        let decoded = '';
+        for (let i = 0; i < this.encriptedMsg.length; i++) {//por cada caracter en el mensaje cifrado
+            temp += this.encriptedMsg.charAt(i);//almacenarlo en un string temporal
+            for(let j = 0; j < this.tableAddress.length; j++) {//por cada elemento en la tabla de direcciones
+                if (this.tableAddress[j][1] == temp) {//si coinciden el temporal y alguna dirección
+                    decoded += String.fromCharCode(this.tableAddress[j][0]);//almacenar en un string
+                    temp = '';//reiniciar el temporal
+                    break;//y finalizar el bucle interior
+                }
+            }
+        }
+
+        return decoded;
+    }
+
+    //get HTML
     /**
      * @desc método recursivo que recorre el árbol y construye el html para ser impreso
      * @param Node head - cabeza del árbol
@@ -483,7 +513,7 @@ class Huffman {
 }
 
 /**
- * @desc función que busca el mensaje ingresado en el formulario, inicia huffman e imprime los resultados
+ * @desc función que busca el mensaje ingresado en el formulario, instancia huffman e imprime los resultados
  * @return void
 */
 function startHuffman() {
@@ -494,6 +524,11 @@ function startHuffman() {
         $('#addressTable').html(huffman.addressHTML());
         $('#msgCodeTable').html(huffman.msgCodeHTML());
         $('#msgCodeTable').html(huffman.msgCodeHTML());
+
+        $('#msg').html(huffman.objInfo.msg);
+        $('#encriptedMsg').html(huffman.objInfo.encriptedMsg);
+        $('#decriptedMsg').html(huffman.objInfo.decriptedMsg);
+
         $('#initChars').html(huffman.objInfo.initChars);
         $('#usedChars').html(huffman.objInfo.usedChars);
         $('#initBits').html(huffman.objInfo.initBits);
@@ -501,15 +536,21 @@ function startHuffman() {
         $('#difBits').html(huffman.objInfo.difBits);
         $('#usedPercent').html(huffman.objInfo.usedPercent);
         $('#freePercent').html(huffman.objInfo.freePercent);
-        $('#progressBar').attr('style', 'width:' + huffman.objInfo.usedPercent + '%')
+
+        $('#progressBar').attr('style', 'width:' + huffman.objInfo.usedPercent + '%');
         $('#progressBar').html(huffman.objInfo.usedPercent + "%");
-        $('#freeBar').attr('style', 'width:' + huffman.objInfo.freePercent + '%')
+        $('#freeBar').attr('style', 'width:' + huffman.objInfo.freePercent + '%');
         $('#freeBar').html(huffman.objInfo.freePercent + "%");
     } else {
         $('#matrixTable').html('');
         $('#treeUl').html('');
         $('#addressTable').html('');
         $('#msgCodeTable').html('');
+
+        $('#msg').html('');
+        $('#encriptedMsg').html('');
+        $('#decriptedMsg').html('');
+
         $('#initChars').html(0);
         $('#usedChars').html(0);
         $('#initBits').html(0);
@@ -517,6 +558,7 @@ function startHuffman() {
         $('#difBits').html(0);
         $('#usedPercent').html(0);
         $('#freePercent').html(0);
+
         $('#progressBar').attr('style', 'width:0%')
         $('#progressBar').html('0%');
         $('#freeBar').attr('style', 'width:0%')
