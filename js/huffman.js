@@ -381,7 +381,7 @@ class Huffman {
         let decoded = '';
         for (let i = 0; i < this.encriptedMsg.length; i++) {//por cada caracter en el mensaje cifrado
             temp += this.encriptedMsg.charAt(i);//almacenarlo en un string temporal
-            for(let j = 0; j < this.tableAddress.length; j++) {//por cada elemento en la tabla de direcciones
+            for (let j = 0; j < this.tableAddress.length; j++) {//por cada elemento en la tabla de direcciones
                 if (this.tableAddress[j][1] == temp) {//si coinciden el temporal y alguna dirección
                     decoded += String.fromCharCode(this.tableAddress[j][0]);//almacenar en un string
                     temp = '';//reiniciar el temporal
@@ -409,17 +409,16 @@ class Huffman {
             let htmlRight = this.treeHTML(head.right);
 
             html = '<li>' +
-                '<div class="rounded-pill px-2 py-1">' +
-                (head.symbol != null ? String.fromCharCode(head.symbol) : head.freq) +
+                '<div class="rounded-pill px-2 py-1" '+(head.symbol == null?'style="font-size: 0.9rem"':'')+'>' +
+                (head.symbol != null ? (head.symbol == 32 ? '&nbsp' : String.fromCharCode(head.symbol)) : head.freq) +
                 '</div>';
 
-            if (!(head.left === null && head.right === null)) {
+            if (head.left != null || head.right != null) {
 
                 html += '<ul>' +
                     htmlLeft +
                     htmlRight +
-                    '</ul>' +
-                    '</li>';
+                    '</ul>';
             }
 
             html += '</li>';
@@ -541,6 +540,8 @@ function startHuffman() {
         $('#progressBar').html(huffman.objInfo.usedPercent + "%");
         $('#freeBar').attr('style', 'width:' + huffman.objInfo.freePercent + '%');
         $('#freeBar').html(huffman.objInfo.freePercent + "%");
+        $('#msgTxt').val('');
+        $('#msgTxt').focus();
     } else {
         $('#matrixTable').html('');
         $('#treeUl').html('');
