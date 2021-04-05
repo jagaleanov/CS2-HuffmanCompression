@@ -152,12 +152,12 @@ class Huffman {
 
         this.setTree();
         this.setMatrix();
-        this.setAddress(this.headTree, '')
+        this.setAddress(this.headTree)
         this.setMsgCode();
         this.setinfo();
     }
 
-    //HELPERS
+
     /**
      * @desc método recursivo que ordena un arreglo de números
      * @param array array - el arreglo a ordenar
@@ -207,7 +207,7 @@ class Huffman {
 
     /**
      * @desc método que devuelve un arreglo ordenado de números ascii usados en el mensaje
-     *  @return array - el arreglo de números 
+     * @return array - el arreglo de números 
     */
     msgToAsciiArray() {
         let charArray = this.fullMsgToAsciiArray();//toma el mensaje en ascii
@@ -229,14 +229,14 @@ class Huffman {
      * @param int char - el número del caracter a buscar
      * @return int - cantidad de apariciones 
     */
-    countFreqInMsg(char) {
-        let count = 0;
+    countFreqInMsg(num) {
+        let counter = 0;
         for (let i = 0; i < this.msg.length; i++) {
-            if (this.msg.charCodeAt(i) == char) {
-                count++;
+            if (this.msg.charCodeAt(i) == num) {
+                counter++;
             }
         }
-        return count;
+        return counter;
     }
 
     //SET DATA
@@ -248,7 +248,7 @@ class Huffman {
         let listFreqs = new ListFreq();
         let arrayAscii = this.msgToAsciiArray();//caracteres ascii usados en el mensaje
 
-        for (let i = 0; i < arrayAscii.length * 2 - 1; i++) {//crear las columnas de la mastriz (tamaño *2 -1)
+        for (let i = 0; i < arrayAscii.length * 2 - 1; i++) {//crear las columnas de la matriz (tamaño *2 -1)
             if (i < arrayAscii.length) {//si es un nodo hoja
 
                 //añadirlo a lista de frecuencias y a la lista de nodos
@@ -279,7 +279,7 @@ class Huffman {
             }
         }
 
-        //el último nodo es la cabeza del arbol y por ser el último tiene todas las relaciones asignadas
+        //el último nodo es la cabeza del árbol y por ser el último tiene todas las relaciones asignadas
         this.headTree = this.arrayNodes[this.arrayNodes.length - 1];
     }
 
@@ -310,7 +310,7 @@ class Huffman {
      * @param string address - '' (vacio)
      * @return void
     */
-    setAddress(head, address) {
+    setAddress(head, address = '') {
         if (head.left == null && head.right == null) {//si es una hoja
             this.tableAddress[head.pos] = [head.symbol, address];//almacenar la dirección
         } else {//si es nodo intermedio
@@ -362,7 +362,7 @@ class Huffman {
         this.objInfo = {};
         this.objInfo.msg = this.msg;
         this.objInfo.encriptedMsg = this.encriptedMsg;
-        this.objInfo.decriptedMsg = this.decode();
+        this.objInfo.decriptedMsg = this.decode();//mensaje decodificado
         this.objInfo.initChars = this.msg.length;
         this.objInfo.usedChars = this.msgToAsciiArray().length;
         this.objInfo.initBits = initBits;
@@ -395,7 +395,7 @@ class Huffman {
 
     //get HTML
     /**
-     * @desc método recursivo que recorre el árbol y construye el html para ser impreso
+     * @desc método recursivo que recorre el árbol y construye el html para imprimirlo
      * @param Node head - cabeza del árbol
      * @return string html 
     */
@@ -409,7 +409,7 @@ class Huffman {
             let htmlRight = this.treeHTML(head.right);
 
             html = '<li>' +
-                '<div class="rounded-pill px-2 py-1" '+(head.symbol == null?'style="font-size: 0.9rem"':'')+'>' +
+                '<div class="rounded-pill px-2 py-1" ' + (head.symbol == null ? 'style="font-size: 0.9rem"' : '') + '>' +
                 (head.symbol != null ? (head.symbol == 32 ? '&nbsp' : String.fromCharCode(head.symbol)) : head.freq) +
                 '</div>';
 
@@ -428,7 +428,7 @@ class Huffman {
     }
 
     /**
-     * @desc método que recorre la matriz y construye el html para ser impresa
+     * @desc método que recorre la matriz y construye el html para imprimirla
      * @return string html 
     */
     matrixHTML() {
@@ -472,7 +472,7 @@ class Huffman {
     }
 
     /**
-     * @desc método que recorre la tabla de direcciones y construye el html para ser impresa
+     * @desc método que recorre la tabla de direcciones y construye el html para imprimirla
      * @return string html 
     */
     addressHTML() {
@@ -492,7 +492,7 @@ class Huffman {
     }
 
     /**
-     * @desc método que recorre la tabla de traducción del mensaje y construye el html para ser impreso
+     * @desc método que recorre la tabla de traducción del mensaje y construye el html para imprimirla
      * @return string html 
     */
     msgCodeHTML() {
@@ -512,7 +512,7 @@ class Huffman {
 }
 
 /**
- * @desc función que busca el mensaje ingresado en el formulario, instancia huffman e imprime los resultados
+ * @desc función que recibe el mensaje ingresado en el formulario, instancia huffman e imprime los resultados
  * @return void
 */
 function startHuffman() {
@@ -540,8 +540,6 @@ function startHuffman() {
         $('#progressBar').html(huffman.objInfo.usedPercent + "%");
         $('#freeBar').attr('style', 'width:' + huffman.objInfo.freePercent + '%');
         $('#freeBar').html(huffman.objInfo.freePercent + "%");
-        $('#msgTxt').val('');
-        $('#msgTxt').focus();
     } else {
         $('#matrixTable').html('');
         $('#treeUl').html('');
